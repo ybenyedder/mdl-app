@@ -80,12 +80,7 @@
 	let testingStripe = $state(false);
 	let stripeTestMsg = $state<{ ok: boolean; text: string } | null>(null);
 
-	let merchSupplierName = $state('');
-	let merchSupplierEmail = $state('');
-	let merchSupplierUrl = $state('');
-
-	// Étape 5 : Kit démarrage & QR
-	let createStarterKit = $state(true);
+	// Étape 5 : QR & Validation
 	let saving = $state(false);
 	let saveError = $state('');
 	let adhesionQrSvg = $state('');
@@ -106,8 +101,8 @@
 		{ id: 1, title: 'Lycée & Admin', subtitle: 'Lieu & compte Président' },
 		{ id: 2, title: 'Couleurs & Logo', subtitle: 'Identité visuelle' },
 		{ id: 3, title: 'Adhésions', subtitle: 'Cotisation & accès' },
-		{ id: 4, title: 'Stripe & Merch', subtitle: 'CB & vrai fournisseur' },
-		{ id: 5, title: 'Lancement', subtitle: 'Checklist & QR Code' }
+		{ id: 4, title: 'Paiement CB Stripe', subtitle: 'Encaissements en ligne' },
+		{ id: 5, title: 'Lancement', subtitle: 'Validation & QR Code' }
 	];
 
 	function parseEurToCents(raw: string): number {
@@ -166,10 +161,6 @@
 				registrationMode = s.registrationMode || 'open';
 				stripeEnabled = Boolean(s.stripeEnabled);
 				stripePublishableKey = s.stripePublishableKey || '';
-				merchSupplierName = s.merchSupplierName || '';
-				merchSupplierEmail = s.merchSupplierEmail || '';
-				merchSupplierUrl = s.merchSupplierUrl || '';
-				createStarterKit = Boolean(payload.needsAdminBootstrap || !payload.checklist?.hasMerch);
 			}
 
 			if (typeof window !== 'undefined') {
@@ -291,10 +282,7 @@
 				registrationMode,
 				stripeEnabled,
 				stripePublishableKey: stripePublishableKey.trim() || null,
-				merchSupplierName: merchSupplierName.trim(),
-				merchSupplierEmail: merchSupplierEmail.trim(),
-				merchSupplierUrl: merchSupplierUrl.trim(),
-				createStarterKit,
+				createStarterKit: false,
 				markCompleted: true
 			};
 
@@ -704,7 +692,7 @@
 			<Card class="space-y-5">
 				<div class="space-y-3 rounded-[12px] border border-border bg-surface p-4">
 					<div>
-						<h2 class="text-sm font-bold text-ink">1. Paiement CB Stripe (optionnel)</h2>
+						<h2 class="text-sm font-bold text-ink">Paiement CB Stripe (optionnel)</h2>
 						<ol class="mt-1.5 list-decimal space-y-1 pl-4 text-xs text-muted">
 							<li>Crée un compte associatif gratuit sur <strong>dashboard.stripe.com</strong>.</li>
 							<li>Ouvre <strong>Développeurs → Clés API</strong> et copie ta clé publique (<code>pk_...</code>) et secrète (<code>sk_...</code>).</li>
@@ -756,36 +744,6 @@
 						</p>
 					{/if}
 				</div>
-
-				<div class="space-y-3 rounded-[12px] border border-border bg-surface p-4">
-					<div>
-						<h2 class="text-sm font-bold text-ink">2. Vrai fournisseur textile de votre boutique (optionnel)</h2>
-						<p class="mt-1 text-xs text-muted">
-							La boutique fonctionne en <strong>précommandes zéro avance de trésorerie</strong> : elle agrège automatiquement toutes les tailles XS→XXL et génère un <strong>bon de commande officiel</strong> prêt à envoyer à votre imprimeur/brodeur réel (atelier local près de {schoolCity || 'votre lycée'}, sérigraphe, Stanley/Stella, Wordans, Printful…).
-						</p>
-					</div>
-
-					<div class="grid gap-3 sm:grid-cols-3">
-						<input
-							type="text"
-							bind:value={merchSupplierName}
-							placeholder="Nom fournisseur (ex : Atelier Azur)"
-							class="min-h-11 rounded-[10px] border border-border bg-card px-3 text-sm text-ink"
-						/>
-						<input
-							type="email"
-							bind:value={merchSupplierEmail}
-							placeholder="Email devis/commandes fournisseur"
-							class="min-h-11 rounded-[10px] border border-border bg-card px-3 text-sm text-ink"
-						/>
-						<input
-							type="url"
-							bind:value={merchSupplierUrl}
-							placeholder="Site / catalogue (https://...)"
-							class="min-h-11 rounded-[10px] border border-border bg-card px-3 text-sm text-ink"
-						/>
-					</div>
-				</div>
 			</Card>
 		{/if}
 
@@ -800,15 +758,7 @@
 							<li>✓ Association : <strong>{mdlName}</strong> · Année {schoolYear}</li>
 							<li>✓ Cotisation : <strong>{formatEuros(parseEurToCents(membershipFeeEur))}</strong> ({registrationMode})</li>
 							<li>✓ Stripe CB : <strong>{stripeEnabled ? 'Activé' : 'Paiement bureau MDL (espèces/virement)'}</strong></li>
-							<li>✓ Fournisseur boutique : <strong>{merchSupplierName || 'À définir plus tard'}</strong></li>
 						</ul>
-
-						<label class="flex items-start gap-2.5 rounded-[10px] border border-border bg-surface p-3 text-xs text-ink cursor-pointer">
-							<input type="checkbox" bind:checked={createStarterKit} class="mt-0.5 size-4 accent-brand" />
-							<span>
-								<strong>Générer le kit de démarrage</strong> (1 pull de promo exemple, 1 événement d'accueil public et 1 réunion de bureau prêts à modifier si la base est vide).
-							</span>
-						</label>
 					</div>
 
 					{#if adhesionQrSvg}

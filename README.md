@@ -26,8 +26,8 @@
 
 ## Points clés
 
-- **Didacticiel `/setup` (auto-hébergement guidé)** : dès le premier démarrage sur une base vierge, création du compte Administrateur/Président, recherche directe du lycée dans l'**annuaire officiel de l'Éducation nationale (`data.education.gouv.fr`)**, choix des couleurs/logo, cotisation, clés **Stripe CB**, fournisseur textile et **QR Code d'adhésion `/adhesion`**.
-- **Boutique zéro-avance & vrais fournisseurs** : aucune usine imposée ni commission plateforme. Renseignez votre propre imprimeur/brodeur (`merchSupplierName`, `merchSupplierEmail`, `merchSupplierUrl`, `supplierReference`), collectez les précommandes `XS→XXL` puis générez le **bon de commande consolidé** (`mailto:` pré-rempli + export CSV).
+- **Didacticiel `/setup` (auto-hébergement guidé)** : dès le premier démarrage sur une base vierge (ou dès la 1re connexion Admin), création du compte Administrateur/Président, recherche directe du lycée dans l'**annuaire officiel de l'Éducation nationale (`data.education.gouv.fr`)**, choix des couleurs/logo, cotisation, clés **Stripe CB** et **QR Code d'adhésion `/adhesion`**.
+- **Boutique zéro-avance & vrai fournisseur configuré dans `.env`** : pré-configurée par défaut sur un vrai prestataire français spécialisé MDL (**Good is Merch** · `contact@goodismerch.com`) via les variables `MERCH_SUPPLIER_NAME`, `MERCH_SUPPLIER_EMAIL` et `MERCH_SUPPLIER_URL` dans `.env` (modifiable côté serveur à tout moment sans complexifier l'interface Admin). Génération automatique du **bon de commande consolidé `XS→XXL`** (`mailto:` + export CSV).
 - **Billetterie QR signée Ed25519 hors-ligne** : scan caméra temps réel via WebAssembly Rust (`crates/mdl-wasm`) sans connexion requise à l'entrée.
 - **Vie associative complète** : Projets & Kanban, Trésorerie & justificatifs chiffrés, Réunions (ordre du jour, émargement, PV PDF), Assemblées Générales (quorum + votes), Sondages temps réel, Passation & Accord établissement PDF, Attestation Parcoursup PDF, Rôles RBAC dynamiques.
 - **Sécurité & RGPD** : chiffrement **AES-256-GCM** au repos, clés Stripe chiffrées en base, journal d'audit chaîné **SHA-256**, PWA installable iOS/Android.

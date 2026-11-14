@@ -175,9 +175,9 @@ export async function loadSchoolSettings(): Promise<App.Locals['settings']> {
       registrationMode: 'open',
       stripeEnabled: envSecret,
       stripePublishableKey: process.env.PUBLIC_STRIPE_PUBLISHABLE_KEY?.trim() || null,
-      merchSupplierName: '',
-      merchSupplierEmail: '',
-      merchSupplierUrl: '',
+      merchSupplierName: process.env.MERCH_SUPPLIER_NAME?.trim() || 'Good is Merch',
+      merchSupplierEmail: process.env.MERCH_SUPPLIER_EMAIL?.trim() || 'contact@goodismerch.com',
+      merchSupplierUrl: process.env.MERCH_SUPPLIER_URL?.trim() || 'https://goodismerch.com',
       setupCompleted: false
     };
   }
@@ -199,9 +199,9 @@ export async function loadSchoolSettings(): Promise<App.Locals['settings']> {
     registrationMode: row.registrationMode,
     stripeEnabled: (row.stripeEnabled && hasSecret) || (!row.stripeSecretKeyEncrypted && Boolean(process.env.STRIPE_SECRET_KEY?.trim()) && row.stripeEnabled),
     stripePublishableKey: row.stripePublishableKey || process.env.PUBLIC_STRIPE_PUBLISHABLE_KEY?.trim() || null,
-    merchSupplierName: row.merchSupplierName || '',
-    merchSupplierEmail: row.merchSupplierEmail || '',
-    merchSupplierUrl: row.merchSupplierUrl || '',
+    merchSupplierName: row.merchSupplierName?.trim() || process.env.MERCH_SUPPLIER_NAME?.trim() || 'Good is Merch',
+    merchSupplierEmail: row.merchSupplierEmail?.trim() || process.env.MERCH_SUPPLIER_EMAIL?.trim() || 'contact@goodismerch.com',
+    merchSupplierUrl: row.merchSupplierUrl?.trim() || process.env.MERCH_SUPPLIER_URL?.trim() || 'https://goodismerch.com',
     setupCompleted: Boolean(row.setupCompleted)
   };
 }
