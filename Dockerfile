@@ -95,6 +95,7 @@ COPY --from=node-builder /app/apps/web/package.json ./apps/web/package.json
 COPY --from=node-builder /app/apps/web/node_modules ./apps/web/node_modules
 COPY --from=node-builder /app/apps/web/drizzle ./apps/web/drizzle
 COPY --from=node-builder /app/apps/web/build ./apps/web/build
+COPY apps/web/server.mjs ./apps/web/server.mjs
 
 RUN mkdir -p /app/data/uploads \
     && chown -R mdl:mdl /app
@@ -111,4 +112,4 @@ EXPOSE 3000
 HEALTHCHECK --interval=30s --timeout=5s --start-period=20s --retries=3 \
   CMD curl -fsS http://127.0.0.1:3000/api/health || exit 1
 
-CMD ["node", "apps/web/build"]
+CMD ["node", "apps/web/server.mjs"]
