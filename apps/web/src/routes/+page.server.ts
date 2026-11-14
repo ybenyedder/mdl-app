@@ -1,6 +1,8 @@
+import { redirect } from '@sveltejs/kit';
 import { and, asc, count, desc, eq, gte, inArray, isNull, ne } from 'drizzle-orm';
 import { db } from '$lib/server/db';
 import { events, pollVotes, polls, projects, tickets, users } from '$lib/server/db/schema';
+import { hasPermission } from '$shared/permissions';
 import type { PageServerLoad } from './$types';
 
 export interface PublicEventSummary {
@@ -39,7 +41,18 @@ function parsePollOptions(raw: string): string[] {
 	}
 }
 
-export const load: PageServerLoad = async () => {
+export const load: PageServerLoad = async ({ locals }) => {
+	if (locals.needsAdminBootstrap) {
+		throw redirect(303, '/setup');
+	}
+	if (
+		locals.user &&
+		hasPermission(locals.user.role, 'admin:settings') &&
+		!locals.settings.setupCompleted
+	) {
+		throw redirect(303, '/setup');
+	}
+
 	const cutoffIso = new Date(Date.now() - 3 * 60 * 60 * 1000).toISOString();
 
 	const [rawEvents, rawPolls, adherentsRows, activeProjectsRows] = await Promise.all([

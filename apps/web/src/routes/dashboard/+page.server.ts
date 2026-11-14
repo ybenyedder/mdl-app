@@ -28,9 +28,15 @@ export interface DashboardAlert {
 }
 
 export const load: PageServerLoad = async ({ locals }) => {
+	if (locals.needsAdminBootstrap) {
+		throw redirect(303, '/setup');
+	}
 	const user = locals.user;
 	if (!user) {
 		throw redirect(302, '/connexion');
+	}
+	if (hasPermission(user.role, 'admin:settings') && !locals.settings.setupCompleted) {
+		throw redirect(302, '/setup');
 	}
 
 	const settings = locals.settings;
