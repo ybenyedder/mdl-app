@@ -95,9 +95,6 @@
 	let schoolPostalCode = $state('');
 	let schoolDepartment = $state('');
 	let mdlName = $state('');
-	let merchSupplierName = $state('');
-	let merchSupplierEmail = $state('');
-	let merchSupplierUrl = $state('');
 	let setupCompleted = $state(false);
 	let primaryColor = $state('#4f46e5');
 	let accentColor = $state('#06b6d4');
@@ -166,9 +163,6 @@
 				schoolPostalCode = s.schoolPostalCode || '';
 				schoolDepartment = s.schoolDepartment || '';
 				mdlName = s.mdlName;
-				merchSupplierName = s.merchSupplierName || '';
-				merchSupplierEmail = s.merchSupplierEmail || '';
-				merchSupplierUrl = s.merchSupplierUrl || '';
 				setupCompleted = Boolean(s.setupCompleted);
 				primaryColor = s.primaryColor;
 				accentColor = s.accentColor;
@@ -497,9 +491,6 @@
 				stripeEnabled,
 				stripePublishableKey: stripePublishableKey.trim() || null,
 				stripeCurrency: stripeCurrency.trim() || 'eur',
-				merchSupplierName: merchSupplierName.trim(),
-				merchSupplierEmail: merchSupplierEmail.trim(),
-				merchSupplierUrl: merchSupplierUrl.trim(),
 				setupCompleted: true
 			};
 
@@ -640,24 +631,19 @@
 			</p>
 		</Card>
 	{:else}
-		<!-- Didacticiel / Assistant de démarrage établissement -->
+		<!-- Lien compact vers l'assistant de démarrage -->
 		{#if canEditSettings}
-			<Card class="flex flex-wrap items-center justify-between gap-4 border-brand/30 bg-brand-soft/40">
-				<div class="space-y-1">
-					<div class="flex flex-wrap items-center gap-2">
-						<h2 class="text-base font-bold text-ink">Didacticiel & Assistant de configuration</h2>
-						<Badge size="sm" variant={setupCompleted ? 'success' : 'warning'}>
-							{setupCompleted ? 'Configuré' : 'À compléter'}
-						</Badge>
-					</div>
-					<p class="text-xs text-muted">
-						Recherche officielle de votre lycée (ex : Lycée Renoir, Cagnes-sur-Mer), couleurs, cotisation, Stripe CB et fournisseur textile guidés pas à pas.
-					</p>
+			<div class="flex flex-wrap items-center justify-between gap-2 rounded-[12px] border border-border bg-surface px-3.5 py-2 text-xs">
+				<div class="flex flex-wrap items-center gap-2">
+					<span class="font-medium text-ink">Assistant de configuration</span>
+					<Badge size="sm" variant={setupCompleted ? 'success' : 'warning'}>
+						{setupCompleted ? 'Configuré' : 'À compléter'}
+					</Badge>
 				</div>
-				<Button href="/setup" variant="primary" size="sm">
-					{setupCompleted ? 'Rouvrir le didacticiel (/setup)' : 'Lancer le didacticiel (/setup)'}
-				</Button>
-			</Card>
+				<a href="/setup" class="font-semibold text-brand hover:underline">
+					{setupCompleted ? 'Rouvrir (/setup) →' : 'Lancer (/setup) →'}
+				</a>
+			</div>
 		{/if}
 
 		<!-- Paramètres du lycée -->
@@ -1019,36 +1005,6 @@
 									{stripeTestResult.message}
 								</p>
 							{/if}
-						</div>
-
-						<!-- Fournisseur textile par défaut (Boutique) -->
-						<div class="rounded-[12px] border border-border bg-surface p-4 space-y-3">
-							<div>
-								<h3 class="text-sm font-bold text-ink">Fournisseur textile par défaut (Boutique)</h3>
-								<p class="text-xs text-muted">
-									Renseigne votre imprimeur / brodeur réel (ou atelier Print-on-Demand) pour pré-remplir les bons de commande par taille depuis la boutique.
-								</p>
-							</div>
-							<div class="grid gap-3 sm:grid-cols-3">
-								<input
-									type="text"
-									bind:value={merchSupplierName}
-									placeholder="Nom (ex : Atelier Azur Textile)"
-									class="min-h-11 rounded-[10px] border border-border bg-card px-3 text-sm text-ink"
-								/>
-								<input
-									type="email"
-									bind:value={merchSupplierEmail}
-									placeholder="Email commandes fournisseur"
-									class="min-h-11 rounded-[10px] border border-border bg-card px-3 text-sm text-ink"
-								/>
-								<input
-									type="url"
-									bind:value={merchSupplierUrl}
-									placeholder="Site web (https://...)"
-									class="min-h-11 rounded-[10px] border border-border bg-card px-3 text-sm text-ink"
-								/>
-							</div>
 						</div>
 
 						<div class="flex justify-end">
