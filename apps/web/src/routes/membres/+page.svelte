@@ -510,7 +510,7 @@
 				<div class="overflow-x-auto">
 					<table class="w-full border-collapse text-left text-sm">
 						<thead>
-							<tr class="border-b border-border text-xs uppercase tracking-wider text-muted">
+							<tr class="border-b border-border text-xs text-muted">
 								<th class="py-2.5 pr-3">Membre</th>
 								<th class="py-2.5 pr-3">Rôle & fonction</th>
 								<th class="py-2.5 pr-3">Adhésion</th>

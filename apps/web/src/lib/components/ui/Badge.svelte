@@ -44,7 +44,7 @@
 
 <span
   class={[
-    'inline-flex items-center rounded-full font-medium tracking-[-0.01em] whitespace-nowrap',
+    'inline-flex items-center rounded-full font-medium whitespace-nowrap',
     variantClasses[variant],
     sizeClasses[size],
     className

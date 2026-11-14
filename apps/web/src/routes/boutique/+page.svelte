@@ -304,7 +304,7 @@
 				const vRes = await fetch(`/api/stripe/verify?session_id=${encodeURIComponent(sessionId)}`);
 				const vData = (await vRes.json().catch(() => ({}))) as { paid?: boolean; error?: string };
 				if (vRes.ok && vData.paid) {
-					toast.success('Paiement confirmé !', 'Ta précommande est enregistrée et validée.');
+					toast.success('Paiement confirmé', 'Ta précommande est enregistrée et validée.');
 				} else if (vData.error) {
 					toast.warning('Vérification Stripe', vData.error);
 				}
@@ -412,7 +412,7 @@
 			if (canManageMerch) {
 				await loadAdminOrders();
 			}
-			toast.success('Précommande enregistrée !', `Référence ${payload.order.lookupCode}`);
+			toast.success('Précommande enregistrée', `Référence ${payload.order.lookupCode}`);
 		} catch {
 			orderError = 'Erreur réseau lors de la précommande.';
 		} finally {
@@ -893,7 +893,7 @@
 <!-- Modal Précommande -->
 <Modal
 	bind:open={orderModalOpen}
-	title={issuedOrder ? 'Précommande confirmée !' : selectedItem?.title || 'Précommander'}
+	title={issuedOrder ? 'Précommande confirmée' : selectedItem?.title || 'Précommander'}
 	description={issuedOrder
 		? `Référence ${issuedOrder.lookupCode}`
 		: selectedItem
@@ -1252,7 +1252,7 @@
 					onclick={async () => {
 						try {
 							await navigator.clipboard.writeText(poText);
-							toast.success('Bon de commande copié !');
+							toast.success('Bon de commande copié');
 						} catch {
 							toast.info('Sélectionne et copie le texte ci-dessus.');
 						}

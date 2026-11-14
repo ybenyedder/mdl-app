@@ -371,12 +371,12 @@
 				Projets & Tâches
 			</h1>
 			<p class="mt-1 text-sm text-muted">
-				Événements, checklists sécurité et rétroplannings {data.settings.schoolYear}.
+				Événements, checklists sécurité et rétroplannings {data.settings.schoolYear}
 			</p>
 		</div>
 		{#if canCreate}
 			<Button variant="primary" size="md" onclick={openCreateModal}>
-				<svg class="size-4.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" aria-hidden="true">
+				<svg class="size-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
 					<path stroke-linecap="round" stroke-linejoin="round" d="M12 5v14M5 12h14" />
 				</svg>
 				Nouveau projet
@@ -408,7 +408,7 @@
 					role="tab"
 					aria-selected={activeTab === 'liste'}
 					onclick={() => (activeTab = 'liste')}
-					class={`gpu-press min-h-9.5 shrink-0 cursor-pointer rounded-[8px] px-4 py-1.5 text-[13px] font-semibold transition ${
+					class={`gpu-press min-h-10 shrink-0 cursor-pointer rounded-[8px] px-4 py-1.5 text-[13px] font-semibold transition ${
 						activeTab === 'liste'
 							? 'bg-card text-ink apple-shadow-card'
 							: 'text-muted hover:text-ink'
@@ -421,7 +421,7 @@
 					role="tab"
 					aria-selected={activeTab === 'kanban'}
 					onclick={() => (activeTab = 'kanban')}
-					class={`gpu-press min-h-9.5 shrink-0 cursor-pointer rounded-[8px] px-4 py-1.5 text-[13px] font-semibold transition ${
+					class={`gpu-press min-h-10 shrink-0 cursor-pointer rounded-[8px] px-4 py-1.5 text-[13px] font-semibold transition ${
 						activeTab === 'kanban'
 							? 'bg-card text-ink apple-shadow-card'
 							: 'text-muted hover:text-ink'
@@ -434,7 +434,7 @@
 					role="tab"
 					aria-selected={activeTab === 'calendrier'}
 					onclick={() => (activeTab = 'calendrier')}
-					class={`gpu-press min-h-9.5 shrink-0 cursor-pointer rounded-[8px] px-4 py-1.5 text-[13px] font-semibold transition ${
+					class={`gpu-press min-h-10 shrink-0 cursor-pointer rounded-[8px] px-4 py-1.5 text-[13px] font-semibold transition ${
 						activeTab === 'calendrier'
 							? 'bg-card text-ink apple-shadow-card'
 							: 'text-muted hover:text-ink'
@@ -450,7 +450,7 @@
 					id="project-search"
 					type="search"
 					bind:value={searchQuery}
-					placeholder="Rechercher..."
+					placeholder="Rechercher"
 					class="min-h-11 w-full rounded-2xl border border-border bg-card px-3.5 py-2 text-base text-ink placeholder:text-muted sm:min-h-10 sm:w-52 sm:text-sm"
 				/>
 				{#if activeTab === 'liste'}
@@ -485,9 +485,9 @@
 		{:else if activeTab === 'liste'}
 			{#if filteredProjects.length === 0}
 				<Card padding="lg" class="text-center">
-					<p class="text-base font-bold text-ink">Aucun projet trouvé</p>
+					<p class="text-base font-semibold text-ink">Aucun projet enregistré</p>
 					<p class="mt-1 text-sm text-muted">
-						Démarrez à partir d’un des 11 modèles prêts à l’emploi ou créez un projet libre.
+						Créez votre premier projet personnalisé avec son budget, ses tâches et sa checklist sécurité
 					</p>
 					{#if canCreate}
 						<Button variant="primary" size="md" class="mt-4" onclick={openCreateModal}>
@@ -544,7 +544,7 @@
 									</div>
 									<div class="h-1.5 w-full overflow-hidden rounded-full bg-surface">
 										<div
-											class="h-full rounded-full bg-brand transition-all duration-300"
+											class="h-full rounded-full bg-brand transition-[width] duration-300 ease-out"
 											style={`width: ${totalTasks > 0 ? Math.round((doneTasks / totalTasks) * 100) : 0}%`}
 										></div>
 									</div>
@@ -620,7 +620,7 @@
 														onclick={() => moveGlobalTask(task, 'done')}
 														class="min-h-8 cursor-pointer rounded-md border border-emerald-500/30 bg-emerald-500/10 px-2.5 py-1 text-xs font-semibold text-emerald-800 hover:bg-emerald-500/20 dark:text-emerald-300"
 													>
-														Terminer ✓
+														Terminer
 													</button>
 												{/if}
 											</div>

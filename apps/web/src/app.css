@@ -1,10 +1,11 @@
 @import 'tailwindcss';
+@custom-variant dark (&:where(.dark, .dark *));
 
 @theme {
   --color-brand: var(--mdl-primary, #007aff);
   --color-brand-soft: color-mix(in srgb, var(--color-brand) 12%, transparent);
   --color-brand-ink: color-mix(in srgb, var(--color-brand) 88%, #000000);
-  --color-accent: #5856d6;
+  --color-accent: #0a84ff;
   --color-surface: #f7f7f5;
   --color-surface-2: rgba(24, 24, 27, 0.065);
   --color-card: #ffffff;
@@ -22,8 +23,8 @@
 
 :root {
   color-scheme: light;
-  --ease-apple: cubic-bezier(0.32, 0.72, 0, 1);
-  --ease-sheet: cubic-bezier(0.32, 0.72, 0, 1);
+  --ease-apple: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-sheet: cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 html.dark {

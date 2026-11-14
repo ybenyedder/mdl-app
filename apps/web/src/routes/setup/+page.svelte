@@ -358,7 +358,7 @@
 			Configurer votre MDL en 5 étapes
 		</h1>
 		<p class="text-sm text-muted">
-			Didacticiel guidé pour héberger la plateforme, situer le lycée (ex : Lycée Renoir, Cagnes-sur-Mer), brancher Stripe et paramétrer la boutique.
+			Configuration en 5 étapes : établissement, identité visuelle, adhésions et paiement Stripe
 		</p>
 	</header>
 
@@ -385,7 +385,7 @@
 							: 'border-border bg-card hover:border-brand/40'
 					}`}
 				>
-					<div class="text-[11px] font-bold uppercase tracking-wider text-muted">
+					<div class="text-[11px] font-medium text-muted">
 						Étape {s.id}
 					</div>
 					<div class="text-xs font-semibold text-ink">{s.title}</div>
@@ -404,7 +404,7 @@
 		{#if step === 1}
 			<Card class="space-y-5">
 				<div class="rounded-[10px] border border-brand/25 bg-brand-soft px-3.5 py-2.5 text-xs text-ink">
-					<strong>Didacticiel :</strong> Recherche directement ton lycée dans l'annuaire officiel de l'Éducation nationale (ou saisis manuellement ta ville, ex : <em>Lycée Auguste Renoir, Cagnes-sur-Mer</em>).
+					<strong>Didacticiel :</strong> Recherche directement ton lycée dans l'annuaire officiel de l'Éducation nationale (ou saisis manuellement ta ville, ex. Lycée Auguste Renoir, Cagnes-sur-Mer).
 				</div>
 
 				{#if needsAdminBootstrap}
@@ -760,12 +760,12 @@
 			<Card class="space-y-5">
 				<div class="grid gap-5 sm:grid-cols-3 sm:items-center">
 					<div class="sm:col-span-2 space-y-3">
-						<h2 class="text-lg font-bold text-ink">Prêt pour le lancement !</h2>
+						<h2 class="text-lg font-semibold text-ink">Prêt pour le lancement</h2>
 						<ul class="space-y-1.5 text-sm text-ink">
-							<li>✓ Lycée : <strong>{schoolName}</strong> ({schoolPostalCode} {schoolCity})</li>
-							<li>✓ Association : <strong>{mdlName}</strong> · Année {schoolYear}</li>
-							<li>✓ Cotisation : <strong>{formatEuros(parseEurToCents(membershipFeeEur))}</strong> ({registrationMode})</li>
-							<li>✓ Stripe CB : <strong>{stripeEnabled ? 'Activé' : 'Paiement bureau MDL (espèces/virement)'}</strong></li>
+							<li>Lycée : <strong>{schoolName}</strong> ({schoolPostalCode} {schoolCity})</li>
+							<li>Association : <strong>{mdlName}</strong> · Année {schoolYear}</li>
+							<li>Cotisation : <strong>{formatEuros(parseEurToCents(membershipFeeEur))}</strong> ({registrationMode})</li>
+							<li>Stripe CB : <strong>{stripeEnabled ? 'Activé' : 'Paiement bureau MDL (espèces/virement)'}</strong></li>
 						</ul>
 					</div>
 
@@ -791,7 +791,7 @@
 				{/if}
 				{#if checklist}
 					<span class="text-xs text-muted">
-						{checklist.hasLocation ? 'Lieu OK' : 'Lieu à compléter'} · {checklist.hasEvents ? 'Événements prêts' : '0 événement'}
+						{checklist.hasLocation ? 'Établissement renseigné' : 'Établissement à compléter'} · Étape {step}/5
 					</span>
 				{/if}
 			</div>

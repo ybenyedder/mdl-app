@@ -628,7 +628,7 @@
 						id="budget-search"
 						type="search"
 						bind:value={searchQuery}
-						placeholder="Libellé, catégorie, projet..."
+						placeholder="Libellé, catégorie, projet"
 						class="min-h-10 w-full rounded-[10px] border border-border bg-surface px-3 py-2 text-base text-ink sm:text-sm"
 					/>
 				</div>
@@ -650,11 +650,17 @@
 				</Button>
 			</Card>
 		{:else}
-			<!-- KPI Totaux Bento 2+1 mobile -->
+			<!-- KPI Totaux -->
 			<section aria-label="Synthèse financière" class="grid grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-4">
 				<Card padding="md" stagger={1}>
-					<p class="text-[11px] font-semibold uppercase tracking-wider text-muted">Recettes</p>
-					<p class="tabular-nums mt-1.5 text-xl font-semibold text-emerald-600 dark:text-emerald-400 sm:text-3xl">
+					<p class="text-xs font-medium text-muted">Recettes</p>
+					<p
+						class={`tabular-nums mt-1.5 text-xl font-semibold sm:text-3xl ${
+							totals.totalRecettesCents > 0
+								? 'text-emerald-600 dark:text-[#4cc38a]'
+								: 'text-ink'
+						}`}
+					>
 						+{formatEuros(totals.totalRecettesCents)}
 					</p>
 					<p class="mt-1 text-xs text-muted">
@@ -663,9 +669,15 @@
 				</Card>
 
 				<Card padding="md" stagger={2}>
-					<p class="text-[11px] font-semibold uppercase tracking-wider text-muted">Dépenses</p>
-					<p class="tabular-nums mt-1.5 text-xl font-semibold text-amber-600 dark:text-amber-400 sm:text-3xl">
-						−{formatEuros(totals.totalDepensesCents)}
+					<p class="text-xs font-medium text-muted">Dépenses</p>
+					<p
+						class={`tabular-nums mt-1.5 text-xl font-semibold sm:text-3xl ${
+							totals.totalDepensesCents > 0 ? 'text-ink' : 'text-muted'
+						}`}
+					>
+						{totals.totalDepensesCents > 0
+							? `−${formatEuros(totals.totalDepensesCents)}`
+							: formatEuros(0)}
 					</p>
 					<p class="mt-1 text-xs text-muted">
 						{entries.filter((e) => e.type === 'depense').length} écriture(s)
@@ -673,12 +685,10 @@
 				</Card>
 
 				<Card padding="md" stagger={3} class="col-span-2 sm:col-span-1">
-					<p class="text-[11px] font-semibold uppercase tracking-wider text-muted">Solde Net</p>
+					<p class="text-xs font-medium text-muted">Solde net</p>
 					<p
 						class={`tabular-nums mt-1.5 text-2xl font-semibold sm:text-3xl ${
-							totals.soldeCents >= 0
-								? 'text-brand-ink'
-								: 'text-red-600 dark:text-red-400'
+							totals.soldeCents < 0 ? 'text-red-600 dark:text-[#e5484d]' : 'text-ink'
 						}`}
 					>
 						{formatEuros(totals.soldeCents)}
@@ -700,7 +710,7 @@
 			<Card padding="md">
 				<div class="mb-4 flex flex-wrap items-center justify-between gap-2">
 					<div>
-						<h2 class="text-lg font-bold text-ink">Journal des écritures</h2>
+						<h2 class="text-lg font-semibold text-ink">Journal des écritures</h2>
 						<p class="text-xs text-muted">
 							{filteredEntries.length} écriture{filteredEntries.length > 1 ? 's' : ''} affichée{filteredEntries.length > 1 ? 's' : ''}
 						</p>
@@ -721,7 +731,7 @@
 					<div class="hidden overflow-x-auto md:block">
 						<table class="w-full border-collapse text-left text-sm">
 							<thead>
-								<tr class="border-b border-border text-xs uppercase tracking-wider text-muted">
+								<tr class="border-b border-border text-xs text-muted">
 									<th class="py-3 pr-3 font-semibold">Date</th>
 									<th class="py-3 pr-3 font-semibold">Libellé & Projet</th>
 									<th class="py-3 pr-3 font-semibold">Catégorie</th>

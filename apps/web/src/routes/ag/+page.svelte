@@ -554,7 +554,7 @@
 		</div>
 		{#if canManageAg}
 			<Button variant="primary" size="md" onclick={openCreateModal}>
-				<svg class="size-4.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+				<svg class="size-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
 					<path stroke-linecap="round" stroke-linejoin="round" d="M12 5v14M5 12h14" />
 				</svg>
 				Nouvelle AG
@@ -714,7 +714,7 @@
 						<!-- Contrôles bureau (transitions de phase + Clôture & Anonymisation) -->
 						{#if canManageAg && ag.status !== 'cloturee'}
 							<div class="flex flex-wrap items-center gap-2 rounded-[10px] bg-surface p-3">
-								<span class="mr-1 text-xs font-bold uppercase tracking-wider text-muted">
+								<span class="mr-1 text-xs font-semibold text-muted">
 									Pilotage séance :
 								</span>
 								{#if ag.status === 'brouillon'}
@@ -763,7 +763,7 @@
 								</Badge>
 								{#if ag.status !== 'cloturee'}
 									{#if detail.hasSignedAttendance}
-										<Badge variant="success">Vous avez émargé ✓</Badge>
+										<Badge variant="success">Émargé</Badge>
 									{:else}
 										<Button
 											variant="primary"
@@ -780,7 +780,7 @@
 
 						<div class="h-2.5 w-full overflow-hidden rounded-full bg-surface">
 							<div
-								class={`h-full rounded-full transition-all duration-300 ${
+								class={`h-full rounded-full transition-[width] duration-300 ease-out ${
 									detail.tally.quorumReached ? 'bg-emerald-500' : 'bg-brand'
 								}`}
 								style={`width: ${quorumPercent}%`}
@@ -1017,7 +1017,7 @@
 									</div>
 									<div class="h-2.5 w-full overflow-hidden rounded-full bg-surface">
 										<div
-											class="h-full rounded-full bg-brand transition-all duration-300"
+											class="h-full rounded-full bg-brand transition-[width] duration-300 ease-out"
 											style={`width: ${pct}%`}
 										></div>
 									</div>
@@ -1035,7 +1035,7 @@
 									</div>
 									<div class="h-2 w-full overflow-hidden rounded-full bg-surface">
 										<div
-											class="h-full rounded-full bg-slate-400 transition-all duration-300"
+											class="h-full rounded-full bg-slate-400 transition-[width] duration-300 ease-out"
 											style={`width: ${blankPct}%`}
 										></div>
 									</div>

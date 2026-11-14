@@ -311,7 +311,7 @@
 
 		{#if dossier}
 			<Button variant="primary" loading={downloadingPdf} onclick={downloadPdf}>
-				<svg class="size-4.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+				<svg class="size-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
 					<path stroke-linecap="round" stroke-linejoin="round" d="M12 3v12m0 0-4-4m4 4 4-4M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2" />
 				</svg>
 				Télécharger l'attestation PDF
@@ -437,13 +437,18 @@
 							disabled={!isViewingSelf}
 							aria-pressed={active}
 							onclick={() => toggleSkill(guide)}
-							class={`min-h-10 cursor-pointer rounded-full border px-3 py-1.5 text-xs font-semibold transition ${
+							class={`inline-flex min-h-10 cursor-pointer items-center gap-1.5 rounded-full border px-3 py-1.5 text-xs font-semibold transition ${
 								active
 									? 'border-brand bg-brand text-white'
 									: 'border-border bg-surface text-ink hover:border-brand/40'
 							} ${!isViewingSelf ? 'opacity-70 cursor-default' : ''}`}
 						>
-							{active ? '✓ ' : '+ '}{guide.label}
+							{#if active}
+								<svg class="size-3.5 shrink-0" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3.5 8.5 6.5 11.5 12.5 5" /></svg>
+							{:else}
+								<svg class="size-3.5 shrink-0" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M8 3.5v9M3.5 8h9" /></svg>
+							{/if}
+							<span>{guide.label}</span>
 						</button>
 					{/each}
 
@@ -454,9 +459,11 @@
 							onclick={() => {
 								if (isViewingSelf) skills = skills.filter((s) => s !== extra);
 							}}
-							class="min-h-10 cursor-pointer rounded-full border border-brand bg-brand text-white px-3 py-1.5 text-xs font-semibold"
+							class="inline-flex min-h-10 cursor-pointer items-center gap-1.5 rounded-full border border-brand bg-brand px-3 py-1.5 text-xs font-semibold text-white"
 						>
-							✓ {extra} ×
+							<svg class="size-3.5 shrink-0" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3.5 8.5 6.5 11.5 12.5 5" /></svg>
+							<span>{extra}</span>
+							<svg class="size-3.5 shrink-0" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M4.5 4.5l7 7M11.5 4.5l-7 7" /></svg>
 						</button>
 					{/each}
 				</div>

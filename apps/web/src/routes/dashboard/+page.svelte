@@ -202,10 +202,12 @@
 				{data.settings.mdlName} · {data.settings.schoolYear}
 			</p>
 			<h1 class="text-[28px] sm:text-[34px] font-semibold tracking-[-0.03em] leading-[1.1] text-ink">
-				Bonjour {user.firstName}
+				Tableau de bord
 			</h1>
 			<p class="text-[13px] text-muted">
-				{roleLabel}{#if user.classe} · {user.classe}{/if}{#if user.isAdherent} · Adhérent{/if}
+				{[user.firstName + ' ' + user.lastName, roleLabel, user.classe, user.isAdherent ? 'Adhérent' : null]
+					.filter(Boolean)
+					.join(' · ')}
 			</p>
 		</div>
 

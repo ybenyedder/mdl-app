@@ -272,7 +272,7 @@
 			newLocation = '';
 			newAgenda = [{ title: 'Bilan des actions en cours', durationMin: 15, done: false }];
 			await loadMeetings();
-			toast.success('Réunion planifiée !');
+			toast.success('Réunion planifiée');
 		} catch {
 			createError = 'Erreur réseau.';
 		} finally {
@@ -404,7 +404,7 @@
 						<div class="grid gap-4 lg:grid-cols-2">
 							<!-- Ordre du jour -->
 							<div class="rounded-[12px] border border-border bg-surface p-3.5 space-y-2.5">
-								<h3 class="text-xs font-bold uppercase tracking-wider text-muted">
+								<h3 class="text-xs font-semibold text-muted">
 									Ordre du jour ({m.agenda.length})
 								</h3>
 								{#if m.agenda.length === 0}
@@ -439,7 +439,7 @@
 							<!-- RSVP & émargement -->
 							<div class="rounded-[12px] border border-border bg-surface p-3.5 space-y-3">
 								<div class="flex flex-wrap items-center justify-between gap-2">
-									<h3 class="text-xs font-bold uppercase tracking-wider text-muted">
+									<h3 class="text-xs font-semibold text-muted">
 										Ma présence & émargement ({m.attendees.filter((a) => a.rsvpStatus === 'present').length} présent(s))
 									</h3>
 									{#if canRsvp}
@@ -492,7 +492,7 @@
 															Émargé
 														</label>
 													{:else if att.checkedIn}
-														<span class="text-[11px] font-semibold text-emerald-500">✓ Émargé</span>
+														<span class="text-[11px] font-semibold text-emerald-500">Émargé</span>
 													{/if}
 												</div>
 											</div>
@@ -504,7 +504,7 @@
 
 						{#if m.minutesText}
 							<div class="rounded-[12px] border border-border bg-surface p-3.5 space-y-1">
-								<div class="text-xs font-bold uppercase tracking-wider text-muted">Compte-rendu</div>
+								<div class="text-xs font-semibold text-muted">Compte-rendu</div>
 								<p class="whitespace-pre-line text-sm text-ink leading-relaxed">{m.minutesText}</p>
 							</div>
 						{/if}

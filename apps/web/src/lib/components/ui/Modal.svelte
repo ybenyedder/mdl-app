@@ -208,7 +208,7 @@
 							aria-label="Fermer la fenêtre"
 							class="gpu-press -mr-1.5 -mt-0.5 inline-flex size-9 shrink-0 cursor-pointer items-center justify-center rounded-full bg-surface-2 text-muted transition hover:text-ink"
 						>
-							<svg class="size-4.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true">
+							<svg class="size-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true">
 								<path stroke-linecap="round" stroke-linejoin="round" d="M6 6l12 12M18 6L6 18" />
 							</svg>
 						</button>
@@ -221,7 +221,7 @@
 							aria-label="Fermer la fenêtre"
 							class="gpu-press inline-flex size-9 cursor-pointer items-center justify-center rounded-full bg-surface-2 text-muted transition hover:text-ink"
 						>
-							<svg class="size-4.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true">
+							<svg class="size-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true">
 								<path stroke-linecap="round" stroke-linejoin="round" d="M6 6l12 12M18 6L6 18" />
 							</svg>
 						</button>

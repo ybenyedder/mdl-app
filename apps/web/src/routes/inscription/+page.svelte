@@ -80,7 +80,7 @@
 				return;
 			}
 
-			toast.success('Compte créé !', `Bienvenue sur ${data.settings.mdlName}.`);
+			toast.success('Compte créé', `Bienvenue sur ${data.settings.mdlName}`);
 			await invalidateAll();
 			await goto('/dashboard');
 		} catch {
@@ -300,7 +300,7 @@
 							type="checkbox"
 							bind:checked={rgpdConsent}
 							required
-							class="mt-0.5 size-4.5 shrink-0 cursor-pointer rounded border-border accent-brand"
+							class="mt-0.5 size-4 shrink-0 cursor-pointer rounded border-border accent-brand"
 						/>
 						<span class="text-[12px] leading-relaxed text-ink">
 							J'accepte que mes informations soient utilisées pour gérer mon adhésion à la MDL et j'ai pris connaissance de la

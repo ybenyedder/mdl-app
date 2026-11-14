@@ -270,7 +270,7 @@
 						: p
 				);
 			}
-			toast.success('Vote enregistré !', 'Merci pour ta participation.');
+			toast.success('Vote enregistré');
 		} catch {
 			pollsList = prevSnapshot;
 			toast.error('Erreur réseau', 'Impossible d’envoyer ton vote pour le moment.');
@@ -435,7 +435,7 @@
 					createOpen = true;
 				}}
 			>
-				<svg class="size-4.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+				<svg class="size-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
 					<path stroke-linecap="round" d="M12 5v14M5 12h14" />
 				</svg>
 				Créer en 30 s

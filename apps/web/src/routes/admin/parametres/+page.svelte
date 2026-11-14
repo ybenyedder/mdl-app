@@ -1181,7 +1181,7 @@
 					<div class="overflow-x-auto">
 						<table class="w-full border-collapse text-left text-xs">
 							<thead>
-								<tr class="border-b border-border uppercase tracking-wider text-muted">
+								<tr class="border-b border-border text-muted">
 									<th class="py-2 pr-3">#</th>
 									<th class="py-2 pr-3">Date</th>
 									<th class="py-2 pr-3">Acteur</th>
@@ -1335,7 +1335,7 @@
 				{@const allGroupSelected = group.permissions.every((p) => rolePermissionsInput.includes(p.key))}
 				<div class="space-y-2 rounded-[12px] border border-border bg-surface p-3">
 					<div class="flex items-center justify-between gap-2 border-b border-border/70 pb-1.5">
-						<span class="text-xs font-bold uppercase tracking-wider text-ink">
+						<span class="text-xs font-semibold text-ink">
 							{group.label}
 						</span>
 						<button

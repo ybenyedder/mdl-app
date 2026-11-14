@@ -83,7 +83,7 @@
 					completedState = 'activated';
 					completedMethod = 'stripe';
 					await invalidateAll();
-					toast.success('Adhésion activée !', 'Bienvenue officiellement à la MDL.');
+					toast.success('Adhésion activée', 'Compte adhérent activé.');
 				} else if (vData.error) {
 					toast.warning('Vérification paiement', vData.error);
 				}
@@ -159,7 +159,7 @@
 				completedMethod = payload.paymentMethod ?? paymentMethod;
 				await invalidateAll();
 				await loadAdhesionInfo();
-				toast.success('Adhésion active !');
+				toast.success('Adhésion activée');
 				return;
 			}
 
@@ -168,7 +168,7 @@
 				completedMethod = payload.paymentMethod ?? paymentMethod;
 				await invalidateAll();
 				await loadAdhesionInfo();
-				toast.success('Demande enregistrée !', 'Règle ta cotisation au bureau MDL pour activation.');
+				toast.success('Demande enregistrée', 'Règle ta cotisation au bureau MDL pour activation.');
 			}
 		} catch {
 			formError = 'Erreur réseau lors de l’adhésion.';
@@ -213,7 +213,7 @@
 		{:else if completedState === 'pending'}
 			<Card padding="lg" class="text-center space-y-4">
 				<Badge variant="warning" dot>En attente de règlement ({completedMethod})</Badge>
-				<h2 class="text-xl font-bold text-ink">Pré-adhésion enregistrée !</h2>
+				<h2 class="text-xl font-semibold text-ink">Pré-adhésion enregistrée</h2>
 				<p class="text-sm text-muted">
 					Passe au foyer / bureau MDL régler ta cotisation de <strong>{formatEuros(info.membershipFeeCents)}</strong> par <strong>{completedMethod}</strong> pour activer instantanément ta carte adhérent.
 				</p>

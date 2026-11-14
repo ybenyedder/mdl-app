@@ -380,7 +380,7 @@
 
 	<!-- En-tête minimaliste Apple HIG / Linear -->
 	<header class="apple-glass sticky top-0 z-30 border-b border-border">
-		<div class="mx-auto flex h-13 max-w-7xl items-center justify-between gap-3 px-4 sm:h-14 sm:px-6">
+		<div class="mx-auto flex h-14 max-w-7xl items-center justify-between gap-3 px-4 sm:px-6">
 			<a
 				href="/"
 				class="group flex shrink-0 items-center gap-2.5 rounded-lg py-1 focus-visible:outline-2 focus-visible:outline-brand"
@@ -498,21 +498,21 @@
 									<a
 										role="menuitem"
 										href="/dashboard"
-										class="flex min-h-9.5 items-center justify-between rounded-[10px] px-3 py-1.5 text-[13px] font-medium text-ink transition hover:bg-surface-2"
+										class="flex min-h-10 items-center justify-between rounded-[10px] px-3 py-1.5 text-[13px] font-medium text-ink transition hover:bg-surface-2"
 									>
 										<span>Tableau de bord</span>
 									</a>
 									<a
 										role="menuitem"
 										href="/profil"
-										class="flex min-h-9.5 items-center justify-between rounded-[10px] px-3 py-1.5 text-[13px] font-medium text-ink transition hover:bg-surface-2"
+										class="flex min-h-10 items-center justify-between rounded-[10px] px-3 py-1.5 text-[13px] font-medium text-ink transition hover:bg-surface-2"
 									>
 										<span>Profil & sécurité</span>
 									</a>
 									<a
 										role="menuitem"
 										href="/confidentialite"
-										class="flex min-h-9.5 items-center justify-between rounded-[10px] px-3 py-1.5 text-[13px] font-medium text-ink transition hover:bg-surface-2"
+										class="flex min-h-10 items-center justify-between rounded-[10px] px-3 py-1.5 text-[13px] font-medium text-ink transition hover:bg-surface-2"
 									>
 										<span>Confidentialité RGPD</span>
 									</a>
@@ -523,7 +523,7 @@
 										type="button"
 										onclick={handleLogout}
 										disabled={loggingOut}
-										class="flex min-h-9.5 w-full cursor-pointer items-center rounded-[10px] px-3 py-1.5 text-left text-[13px] font-medium text-[#FF3B30] transition hover:bg-red-500/10"
+										class="flex min-h-10 w-full cursor-pointer items-center rounded-[10px] px-3 py-1.5 text-left text-[13px] font-medium text-[#FF3B30] transition hover:bg-red-500/10"
 									>
 										{loggingOut ? 'Déconnexion...' : 'Se déconnecter'}
 									</button>

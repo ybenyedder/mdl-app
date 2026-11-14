@@ -519,7 +519,7 @@
 						aria-label="Progression passation"
 					>
 						<div
-							class="h-full rounded-full bg-brand transition-all duration-300"
+							class="h-full rounded-full bg-brand transition-[width] duration-300 ease-out"
 							style={`width: ${progressPct}%`}
 						></div>
 					</div>
@@ -603,7 +603,7 @@
 
 					{#if canWriteVault}
 						<form onsubmit={handleVaultUpload} class="space-y-3 rounded-[10px] border border-border bg-surface p-3.5">
-							<p class="text-xs font-bold uppercase tracking-wider text-muted">
+							<p class="text-xs font-semibold text-muted">
 								Ajouter un document
 							</p>
 							<div class="grid gap-2.5 sm:grid-cols-2">

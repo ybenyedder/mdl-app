@@ -19,12 +19,12 @@
 	let { projects = [], categories = [], title = 'Analyse budgétaire' }: Props = $props();
 
 	const DONUT_PALETTE = [
-		{ fill: '#4f46e5', name: 'Indigo' },
+		{ fill: '#2563eb', name: 'Cobalt' },
 		{ fill: '#0891b2', name: 'Cyan' },
-		{ fill: '#059669', name: 'Émeraude' },
+		{ fill: '#16a34a', name: 'Émeraude' },
 		{ fill: '#d97706', name: 'Ambre' },
-		{ fill: '#e11d48', name: 'Framboise' },
-		{ fill: '#7c3aed', name: 'Violet' },
+		{ fill: '#dc2626', name: 'Corail' },
+		{ fill: '#64748b', name: 'Ardoise' },
 		{ fill: '#0284c7', name: 'Azur' },
 		{ fill: '#65a30d', name: 'Olive' }
 	] as const;
@@ -340,15 +340,15 @@
 
 			<div class="flex flex-wrap items-center gap-3 text-xs font-medium text-[var(--color-ink)]">
 				<span class="inline-flex items-center gap-1.5">
-					<span class="h-2.5 w-2.5 rounded-xs bg-indigo-600" aria-hidden="true"></span>
+					<span class="h-2.5 w-2.5 rounded-xs bg-zinc-500" aria-hidden="true"></span>
 					Prévisionnel
 				</span>
 				<span class="inline-flex items-center gap-1.5">
-					<span class="h-2.5 w-2.5 rounded-xs bg-cyan-600" aria-hidden="true"></span>
+					<span class="h-2.5 w-2.5 rounded-xs bg-blue-600" aria-hidden="true"></span>
 					Réel
 				</span>
 				<span class="inline-flex items-center gap-1.5">
-					<span class="h-2.5 w-2.5 rounded-xs bg-rose-600" aria-hidden="true"></span>
+					<span class="h-2.5 w-2.5 rounded-xs bg-red-600" aria-hidden="true"></span>
 					Dépassement
 				</span>
 			</div>
@@ -370,14 +370,14 @@
 					<div class="flex flex-wrap items-center gap-x-3 gap-y-1">
 						<span class="font-semibold text-[var(--color-ink)]">{activeProject.label}</span>
 						<span class="text-[var(--color-muted)]">
-							Prévu : <strong class="text-indigo-700 text-brand-ink">{formatCents(activeProject.plannedCents)}</strong>
+							Prévu : <strong class="text-[var(--color-ink)]">{formatCents(activeProject.plannedCents)}</strong>
 						</span>
 						<span class="text-[var(--color-muted)]">
 							Réel :
 							<strong
 								class={activeProject.isOverBudget
-									? 'text-rose-700 dark:text-rose-400'
-									: 'text-cyan-700 dark:text-cyan-300'}
+									? 'text-red-600 dark:text-red-400'
+									: 'text-blue-600 dark:text-blue-400'}
 							>
 								{formatCents(activeProject.spentCents)}
 							</strong>
@@ -472,7 +472,7 @@
 								width={item.barWidth}
 								height={item.plannedH}
 								rx="4"
-								fill="#4f46e5"
+								fill="#71717a"
 								class="svg-bar"
 								style:--bar-delay="{Math.min(item.idx * 45, 270)}ms"
 							/>
@@ -484,7 +484,7 @@
 								width={item.barWidth}
 								height={item.spentH}
 								rx="4"
-								fill={item.isOverBudget ? '#e11d48' : '#0891b2'}
+								fill={item.isOverBudget ? '#dc2626' : '#2563eb'}
 								class="svg-bar"
 								style:--bar-delay="{Math.min(item.idx * 45 + 30, 300)}ms"
 							/>

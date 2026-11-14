@@ -50,8 +50,8 @@
 
   const baseClass = $derived(
     [
-      'inline-flex items-center justify-center font-medium tracking-[-0.01em] select-none gpu-press',
-      'transition-[background-color,color,opacity,transform,filter] duration-150 ease-out',
+      'inline-flex items-center justify-center font-medium select-none gpu-press',
+      'transition-[background-color,color,opacity,transform,border-color] duration-150 ease-[var(--ease-apple)]',
       'focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand',
       'disabled:opacity-45 disabled:pointer-events-none',
       variantClasses[variant],

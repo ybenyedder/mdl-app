@@ -170,7 +170,7 @@
 									</div>
 									<div class="h-1 w-full overflow-hidden rounded-full bg-surface-2">
 										<div
-											class={`h-full rounded-full transition-all duration-300 ${
+											class={`h-full rounded-full transition-[width] duration-300 ease-out ${
 												ev.remainingSeats === 0 ? 'bg-[#dc2626]' : 'bg-ink/80'
 											}`}
 											style={`width: ${Math.round(soldRatio(ev) * 100)}%`}

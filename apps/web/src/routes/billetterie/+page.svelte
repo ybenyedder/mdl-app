@@ -298,7 +298,7 @@
 				const vRes = await fetch(`/api/stripe/verify?session_id=${encodeURIComponent(sessionId)}`);
 				const vData = (await vRes.json().catch(() => ({}))) as { paid?: boolean; error?: string };
 				if (vRes.ok && vData.paid) {
-					toast.success('Paiement confirmé !', 'Ton billet a été validé par Stripe.');
+					toast.success('Paiement confirmé', 'Ton billet a été validé par Stripe.');
 				} else if (vData.error) {
 					toast.warning('Vérification paiement', vData.error);
 				}
@@ -491,7 +491,7 @@
 				}
 			}
 
-			toast.success('Billet réservé !', `Code ${enriched.qrCodeId} prêt dans Mes billets.`);
+			toast.success('Billet réservé', `Code ${enriched.qrCodeId} prêt dans Mes billets.`);
 		} catch {
 			buyError = 'Erreur réseau lors de la réservation.';
 		} finally {
@@ -621,7 +621,7 @@
 		<div class="flex flex-wrap items-center gap-2.5">
 			{#if canScan}
 				<Button href="/billetterie/scanner" variant="secondary">
-					<svg class="size-4.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+					<svg class="size-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
 						<path stroke-linecap="round" d="M4 7V5a1 1 0 0 1 1-1h2m10 0h2a1 1 0 0 1 1 1v2m0 10v2a1 1 0 0 1-1 1h-2M7 20H5a1 1 0 0 1-1-1v-2M7 12h10" />
 					</svg>
 					Scanner à l'entrée
@@ -746,7 +746,7 @@
 								</div>
 								<div class="h-1 w-full overflow-hidden rounded-full bg-surface-2">
 									<div
-										class={`h-full rounded-full transition-all duration-300 ${
+										class={`h-full rounded-full transition-[width] duration-300 ease-out ${
 											isFull
 												? 'bg-[#dc2626]'
 												: fillPct >= 85
@@ -857,7 +857,7 @@
 								type="button"
 								onclick={() => (qrZoomTicket = ticket)}
 								aria-label={`Agrandir le QR code du billet ${ticket.qrCodeId}`}
-								class="gpu-press cursor-pointer rounded-[20px] border border-border bg-white p-3 apple-shadow-card transition hover:scale-[1.03]"
+								class="gpu-press cursor-pointer rounded-[20px] border border-border bg-white p-3 apple-shadow-card transition-[border-color] duration-150 hover:border-brand/50"
 							>
 								<div class="size-36 [&>svg]:h-full [&>svg]:w-full">
 									{@html ticket.qrSvg}
@@ -907,7 +907,7 @@
 				<div class="overflow-x-auto">
 					<table class="w-full border-collapse text-left text-sm">
 						<thead>
-							<tr class="border-b border-border text-xs uppercase tracking-wider text-muted">
+							<tr class="border-b border-border text-xs text-muted">
 								<th class="py-2.5 pr-3">Acheteur</th>
 								<th class="py-2.5 pr-3">Événement</th>
 								<th class="py-2.5 pr-3">Tarif / Mode</th>
@@ -982,7 +982,7 @@
 <!-- Modal achat / réservation billet -->
 <Modal
 	bind:open={buyModalOpen}
-	title={issuedTicket ? 'Billet confirmé !' : selectedEvent?.title || 'Réserver un billet'}
+	title={issuedTicket ? 'Billet confirmé' : selectedEvent?.title || 'Réserver un billet'}
 	description={issuedTicket
 		? 'Présente ce QR code Ed25519 à l’entrée (accessible même hors connexion).'
 		: selectedEvent

@@ -683,7 +683,7 @@
 														onclick={() => moveTask(task, 'done')}
 														class="min-h-8 cursor-pointer rounded-md border border-emerald-500/30 bg-emerald-500/10 px-2.5 py-1 text-xs font-semibold text-emerald-800 hover:bg-emerald-500/20 dark:text-emerald-300"
 													>
-														Terminer ✓
+														Terminer
 													</button>
 												{/if}
 											</div>
