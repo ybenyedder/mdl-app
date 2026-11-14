@@ -29,6 +29,12 @@ const config = {
     },
     alias: {
       $shared: 'src/lib/shared'
+    },
+    serviceWorker: {
+      register: false
+    },
+    version: {
+      pollInterval: 60_000
     }
   }
 };

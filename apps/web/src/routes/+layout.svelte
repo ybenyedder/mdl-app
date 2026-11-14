@@ -2,8 +2,8 @@
 	import '../app.css';
 	import { onMount } from 'svelte';
 	import { dev } from '$app/environment';
-	import { goto, invalidateAll, onNavigate } from '$app/navigation';
-	import { page } from '$app/state';
+	import { beforeNavigate, goto, invalidateAll, onNavigate } from '$app/navigation';
+	import { page, updated } from '$app/state';
 	import Toaster from '$lib/components/ui/Toaster.svelte';
 	import { theme } from '$lib/stores/theme.svelte';
 	import { toast } from '$lib/stores/toast.svelte';
@@ -72,6 +72,12 @@
 	let sheetDragStartY = $state<number | null>(null);
 	let sheetDragOffsetY = $state(0);
 
+	beforeNavigate(({ willUnload, to }) => {
+		if (updated.current && !willUnload && to?.url) {
+			location.href = to.url.href;
+		}
+	});
+
 	onNavigate((navigation) => {
 		userMenuOpen = false;
 		mobileDrawerOpen = false;
@@ -116,8 +122,33 @@
 	onMount(() => {
 		theme.init();
 
+		const handleVisibilityChange = () => {
+			if (document.visibilityState !== 'visible') return;
+			void updated.check().catch(() => {});
+			if ('serviceWorker' in navigator && !dev) {
+				void navigator.serviceWorker
+					.getRegistration('/service-worker.js')
+					.then((reg) => reg?.update().catch(() => {}))
+					.catch(() => {});
+			}
+		};
+		document.addEventListener('visibilitychange', handleVisibilityChange);
+
+		let handleControllerChange: (() => void) | null = null;
 		if ('serviceWorker' in navigator && !dev) {
-			navigator.serviceWorker.register('/sw.js').catch(() => {});
+			const hadController = Boolean(navigator.serviceWorker.controller);
+			let refreshing = false;
+			handleControllerChange = () => {
+				if (!hadController || refreshing) return;
+				const activeTag = document.activeElement?.tagName;
+				if (activeTag === 'INPUT' || activeTag === 'TEXTAREA' || activeTag === 'SELECT') return;
+				refreshing = true;
+				window.location.reload();
+			};
+			navigator.serviceWorker.addEventListener('controllerchange', handleControllerChange);
+			navigator.serviceWorker
+				.register('/service-worker.js', { updateViaCache: 'none' })
+				.catch(() => {});
 		}
 
 		let dismissed = false;
@@ -173,6 +204,10 @@
 		document.addEventListener('keydown', handleKeyDown);
 
 		return () => {
+			document.removeEventListener('visibilitychange', handleVisibilityChange);
+			if (handleControllerChange && 'serviceWorker' in navigator) {
+				navigator.serviceWorker.removeEventListener('controllerchange', handleControllerChange);
+			}
 			window.removeEventListener('beforeinstallprompt', handleBeforeInstallPrompt);
 			window.removeEventListener('appinstalled', handleAppInstalled);
 			document.removeEventListener('click', handleOutsideClick);
