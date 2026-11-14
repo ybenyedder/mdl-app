@@ -9,7 +9,6 @@
 	import { toast } from '$lib/stores/toast.svelte';
 	import { countdownLabel, daysUntil, formatDateFr, formatEuros } from '$shared/format';
 	import { hasPermission } from '$shared/permissions';
-	import { PROJECT_TEMPLATES, type ProjectTemplate } from '$shared/project-templates';
 	import type { PageData } from './$types';
 
 	type ProjectStatus = 'brouillon' | 'en_cours' | 'valide' | 'termine' | 'archive';
@@ -71,9 +70,8 @@
 	let searchQuery = $state('');
 	let statusFilter = $state<'all' | ProjectStatus>('all');
 
-	// Modal nouveau projet
+	// Modal nouveau projet personnalisé
 	let createModalOpen = $state(false);
-	let selectedTemplateId = $state<string>('libre');
 	let formTitle = $state('');
 	let formCategory = $state('Vie lycéenne');
 	let formDescription = $state('');
@@ -269,24 +267,11 @@
 		return { months, unscheduled };
 	});
 
-	function selectTemplate(tpl: ProjectTemplate | 'libre') {
-		if (tpl === 'libre') {
-			selectedTemplateId = 'libre';
-			formTitle = '';
-			formCategory = 'Vie lycéenne';
-			formDescription = '';
-			formBudgetEuros = '0';
-			return;
-		}
-		selectedTemplateId = tpl.id;
-		formTitle = tpl.name;
-		formCategory = tpl.category;
-		formDescription = tpl.description;
-		formBudgetEuros = String(Math.round(tpl.estimatedBudgetCents / 100));
-	}
-
 	function openCreateModal() {
-		selectTemplate('libre');
+		formTitle = '';
+		formCategory = 'Vie lycéenne';
+		formDescription = '';
+		formBudgetEuros = '0';
 		formEventDate = '';
 		createModalOpen = true;
 	}
@@ -315,7 +300,6 @@
 				method: 'POST',
 				headers: { 'Content-Type': 'application/json' },
 				body: JSON.stringify({
-					...(selectedTemplateId !== 'libre' ? { templateId: selectedTemplateId } : {}),
 					title,
 					description: formDescription.trim(),
 					category,
@@ -332,7 +316,7 @@
 			const created = (json as { project: ProjectItem }).project;
 			projects = [created, ...projects];
 			createModalOpen = false;
-			toast.success('Projet créé', `« ${created.title} » est prêt dans le Kanban.`);
+			toast.success('Projet créé', `« ${created.title} » est prêt dans votre espace projets.`);
 		} catch (err) {
 			toast.error('Erreur', err instanceof Error ? err.message : 'Échec de la création.');
 		} finally {
@@ -373,15 +357,10 @@
 		}
 	}
 
-	const activeTemplate = $derived(
-		selectedTemplateId === 'libre'
-			? null
-			: (PROJECT_TEMPLATES.find((t) => t.id === selectedTemplateId) ?? null)
-	);
 </script>
 
 <svelte:head>
-	<title>Projets & Kanban · {data.settings.mdlName}</title>
+	<title>Projets & Tâches · {data.settings.mdlName}</title>
 </svelte:head>
 
 <div class="mx-auto max-w-6xl space-y-6 px-4 py-5 sm:px-6 sm:py-7">
@@ -389,7 +368,7 @@
 	<header class="animate-spring flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
 		<div>
 			<h1 class="text-[26px] font-semibold tracking-[-0.025em] text-ink sm:text-[30px]">
-				Projets & Kanban
+				Projets & Tâches
 			</h1>
 			<p class="mt-1 text-sm text-muted">
 				Événements, checklists sécurité et rétroplannings {data.settings.schoolYear}.
@@ -448,7 +427,7 @@
 							: 'text-muted hover:text-ink'
 					}`}
 				>
-					Kanban ({allGlobalTasks.length})
+					Tableau des tâches ({allGlobalTasks.length})
 				</button>
 				<button
 					type="button"
@@ -572,7 +551,7 @@
 								</div>
 
 								<Button href={`/projets/${project.id}`} variant="secondary" size="sm" fullWidth>
-									Ouvrir le Kanban & checklist
+									Ouvrir les tâches & checklist
 								</Button>
 							</div>
 						</Card>
@@ -708,66 +687,14 @@
 	{/if}
 </div>
 
-<!-- Modal Création de projet (11 modèles ou libre) -->
+<!-- Modal Création de projet personnalisé -->
 <Modal
 	bind:open={createModalOpen}
-	title="Nouveau projet MDL"
-	description="Choisissez l’un des 11 modèles pré-remplis (tâches + checklist sécurité) ou lancez un projet libre."
+	title="Nouveau projet personnalisé"
+	description="Définissez librement le titre, la catégorie, le budget prévisionnel et la date de votre projet."
 	size="lg"
 >
 	<form id="create-project-form" onsubmit={handleCreateProject} class="space-y-5">
-		<div>
-			<p class="mb-2 text-xs font-semibold uppercase tracking-wider text-muted">
-				Modèles disponibles ({PROJECT_TEMPLATES.length} + projet libre)
-			</p>
-			<div class="grid max-h-56 grid-cols-1 gap-2 overflow-y-auto pr-1 sm:grid-cols-2">
-				<button
-					type="button"
-					onclick={() => selectTemplate('libre')}
-					class={`cursor-pointer rounded-[10px] border p-3 text-left transition ${
-						selectedTemplateId === 'libre'
-							? 'border-brand bg-brand-soft/60 ring-1 ring-brand'
-							: 'border-border bg-surface hover:border-brand/40'
-					}`}
-				>
-					<div class="flex items-center justify-between gap-2">
-						<span class="text-sm font-bold text-ink">Projet libre</span>
-						<Badge variant="neutral" size="sm">Personnalisé</Badge>
-					</div>
-					<p class="mt-1 text-xs text-muted">Définissez vous-même le titre, le budget et les tâches.</p>
-				</button>
-
-				{#each PROJECT_TEMPLATES as tpl (tpl.id)}
-					<button
-						type="button"
-						onclick={() => selectTemplate(tpl)}
-						class={`cursor-pointer rounded-[10px] border p-3 text-left transition ${
-							selectedTemplateId === tpl.id
-								? 'border-brand bg-brand-soft/60 ring-1 ring-brand'
-								: 'border-border bg-surface hover:border-brand/40'
-						}`}
-					>
-						<div class="flex items-center justify-between gap-2">
-							<span class="text-sm font-bold text-ink">{tpl.name}</span>
-							<Badge variant="brand" size="sm">{formatEuros(tpl.estimatedBudgetCents)}</Badge>
-						</div>
-						<p class="mt-0.5 text-[11px] font-medium text-muted">
-							{tpl.category} · {tpl.defaultTasks.length} tâches · {tpl.safetyChecklist.length} points sécu
-						</p>
-					</button>
-				{/each}
-			</div>
-		</div>
-
-		{#if activeTemplate}
-			<div class="rounded-[10px] border border-brand/25 bg-brand-soft/40 p-3 text-xs">
-				<p class="font-bold text-ink">Inclus avec le modèle « {activeTemplate.name} » :</p>
-				<p class="mt-1 text-muted">
-					{activeTemplate.defaultTasks.length} tâches rétroplanning générées automatiquement et {activeTemplate.safetyChecklist.length} vérifications sécurité.
-				</p>
-			</div>
-		{/if}
-
 		<div class="grid gap-3.5 sm:grid-cols-2">
 			<div class="sm:col-span-2">
 				<label for="new-proj-title" class="mb-1 block text-xs font-semibold text-ink">

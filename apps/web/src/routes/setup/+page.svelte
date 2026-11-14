@@ -599,8 +599,16 @@
 						</div>
 					</div>
 					<div class="space-y-1.5">
-						<label for="wiz-logo" class="block text-sm font-semibold text-ink">Logo de la MDL (URL optionnelle)</label>
-						<input id="wiz-logo" type="text" bind:value={logoUrl} placeholder="https://.../logo-mdl.png" class="min-h-11 w-full rounded-[10px] border border-border bg-surface px-3.5 py-2 text-sm text-ink" />
+						<div class="flex flex-wrap items-center justify-between gap-2">
+							<label for="wiz-logo" class="block text-sm font-semibold text-ink">Logo de la MDL (URL directe optionnelle)</label>
+							{#if logoUrl}
+								<button type="button" onclick={() => (logoUrl = '/logo.svg')} class="text-xs font-semibold text-brand hover:underline">
+									Logo par défaut
+								</button>
+							{/if}
+						</div>
+						<input id="wiz-logo" type="text" bind:value={logoUrl} placeholder="/logo.svg ou https://.../logo-mdl.png" class="min-h-11 w-full rounded-[10px] border border-border bg-surface px-3.5 py-2 text-sm text-ink" />
+						<p class="text-[11px] text-muted">Laisse vide pour le logo MDL officiel. Évite les liens Brave/Google Images (utilise l’URL directe <code class="font-mono">.png/.svg</code>).</p>
 					</div>
 					<div class="space-y-1.5">
 						<label for="wiz-year" class="block text-sm font-semibold text-ink">Année scolaire</label>

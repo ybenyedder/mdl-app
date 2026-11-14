@@ -292,7 +292,7 @@
 					<p class="tabular-nums text-[26px] font-semibold tracking-[-0.02em] text-ink">
 						{data.kpis.activeProjectsCount}
 					</p>
-					<p class="text-[12px] text-muted">Suivi & Kanban</p>
+					<p class="text-[12px] text-muted">Suivi des tâches</p>
 				</Card>
 			</a>
 		{/if}
@@ -543,7 +543,7 @@
 			<div class="ios-group divide-y divide-border">
 				{#if data.permissions.canReadProjects}
 					<a href="/projets" class="ios-row ios-row-interactive">
-						<span class="text-[14px] text-ink">Projets & Kanban</span>
+						<span class="text-[14px] text-ink">Projets & Tâches</span>
 						<svg class="size-4 text-muted/60" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="m9 6 6 6-6 6" /></svg>
 					</a>
 				{/if}

@@ -7,6 +7,7 @@ import { decryptText, encryptText, hmacLookup } from '$lib/server/crypto';
 import { db } from '$lib/server/db';
 import { merchItems, merchOrders } from '$lib/server/db/schema';
 import { parseJsonBody } from '$lib/server/http';
+import { dispatchGelatoOrderForPaidMerch } from '$lib/server/pod';
 import { createStripeCheckoutSession, getStripeConfig } from '$lib/server/stripe';
 import { hasPermission } from '$shared/permissions';
 import { merchOrderCreateSchema } from '$shared/schemas';
@@ -229,6 +230,10 @@ export const POST: RequestHandler = async (event) => {
       paymentMethod: created.paymentMethod
     }
   });
+
+  if (created.paymentStatus === 'paye') {
+    await dispatchGelatoOrderForPaidMerch(created.id).catch(() => null);
+  }
 
   return json(
     {

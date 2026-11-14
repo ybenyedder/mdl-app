@@ -14,6 +14,7 @@ import {
   users
 } from '$lib/server/db';
 import { parseJsonBody } from '$lib/server/http';
+import { validateLogoUrlInput } from '$lib/server/logo-validation';
 import type { RequestHandler } from './$types';
 
 const setupPayloadSchema = z.object({
@@ -193,6 +194,15 @@ export const POST: RequestHandler = async (event) => {
     throw error(400, 'Renseigne ta clé secrète Stripe (sk_...) pour activer le paiement CB.');
   }
 
+  let nextLogoUrl: string | null = existing?.logoUrl ?? null;
+  if (body.logoUrl !== undefined) {
+    const logoCheck = await validateLogoUrlInput(body.logoUrl);
+    if (!logoCheck.ok) {
+      throw error(400, logoCheck.error);
+    }
+    nextLogoUrl = logoCheck.value;
+  }
+
   const values = {
     schoolName: body.schoolName,
     schoolCity: body.schoolCity,
@@ -203,7 +213,7 @@ export const POST: RequestHandler = async (event) => {
     legalRepresentative: body.legalRepresentative,
     primaryColor: body.primaryColor,
     accentColor: body.accentColor,
-    logoUrl: body.logoUrl !== undefined ? body.logoUrl || null : (existing?.logoUrl ?? null),
+    logoUrl: nextLogoUrl,
     membershipFeeCents: body.membershipFeeCents,
     schoolYear: body.schoolYear,
     registrationMode: body.registrationMode,

@@ -404,7 +404,7 @@ export const ROLE_PRESETS: readonly RolePreset[] = [
   {
     slug: 'resp_taches',
     label: 'Responsable de tâches & projets',
-    description: 'Pilote l’avancement des projets et attribue/édite toutes les tâches Kanban.',
+    description: 'Pilote l’avancement des projets et attribue/édite toutes les tâches des projets.',
     permissions: [
       'members:read',
       'projects:read',

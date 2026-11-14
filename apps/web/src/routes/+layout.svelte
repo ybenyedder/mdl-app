@@ -59,7 +59,15 @@
 	let userMenuOpen = $state(false);
 	let mobileDrawerOpen = $state(false);
 	let loggingOut = $state(false);
+	let logoLoadFailed = $state(false);
+	let fallbackLogoFailed = $state(false);
 	let userMenuEl = $state<HTMLDivElement | null>(null);
+
+	$effect(() => {
+		void data.settings.logoUrl;
+		logoLoadFailed = false;
+		fallbackLogoFailed = false;
+	});
 
 	let sheetDragStartY = $state<number | null>(null);
 	let sheetDragOffsetY = $state(0);
@@ -377,10 +385,18 @@
 				href="/"
 				class="group flex shrink-0 items-center gap-2.5 rounded-lg py-1 focus-visible:outline-2 focus-visible:outline-brand"
 			>
-				{#if data.settings.logoUrl}
+				{#if data.settings.logoUrl && !logoLoadFailed}
 					<img
 						src={data.settings.logoUrl}
 						alt={data.settings.mdlName}
+						onerror={() => (logoLoadFailed = true)}
+						class="size-7 shrink-0 rounded-[8px] border border-border object-cover apple-shadow-card"
+					/>
+				{:else if !fallbackLogoFailed}
+					<img
+						src="/logo.svg"
+						alt={data.settings.mdlName}
+						onerror={() => (fallbackLogoFailed = true)}
 						class="size-7 shrink-0 rounded-[8px] border border-border object-cover apple-shadow-card"
 					/>
 				{:else}

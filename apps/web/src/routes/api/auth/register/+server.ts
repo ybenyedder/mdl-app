@@ -8,6 +8,7 @@ import { createUserSession, getClientIpHash, setSessionCookie } from '$lib/serve
 import { encryptText, hashPassword, hashToken, hmacLookup } from '$lib/server/crypto';
 import { db, invitations, schoolSettings, users } from '$lib/server/db';
 import { parseJsonBody } from '$lib/server/http';
+import { loadRolesCatalog } from '$lib/server/roles';
 import { registerSchema } from '$shared/schemas';
 import type { RequestHandler } from './$types';
 
@@ -107,7 +108,14 @@ export const POST: RequestHandler = async ({ request, cookies, locals }) => {
     ? encryptText(cleanGuardianEmail)
     : null;
 
-  const assignedRole = validInvitation ? validInvitation.role : 'adherent';
+  const rolesCatalog = await loadRolesCatalog();
+  const defaultSelfSignupRole =
+    rolesCatalog.find((r) => r.slug === 'adherent')?.slug ??
+    rolesCatalog.find((r) => r.slug === 'invite')?.slug ??
+    rolesCatalog.find((r) => !r.isElevated && !r.isBureau)?.slug ??
+    rolesCatalog.find((r) => r.slug !== 'president')?.slug ??
+    'president';
+  const assignedRole = validInvitation ? validInvitation.role : defaultSelfSignupRole;
   const assignedCustomTitle = validInvitation ? validInvitation.customTitle : null;
 
   const createdUser = await db.transaction(async (tx) => {

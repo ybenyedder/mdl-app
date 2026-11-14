@@ -2,6 +2,7 @@ import { createHmac, timingSafeEqual } from 'node:crypto';
 import { eq } from 'drizzle-orm';
 import { appendAuditLog } from './audit';
 import { decryptText } from './crypto';
+import { dispatchGelatoOrderForPaidMerch } from './pod';
 import {
   budgetEntries,
   db,
@@ -284,6 +285,7 @@ export async function fulfillStripeCheckoutSession(
         targetId: orderId,
         details: { stripeSessionId: session.id, totalCents: existing.totalCents }
       });
+      await dispatchGelatoOrderForPaidMerch(orderId).catch(() => null);
       return { fulfilled: true, kind, referenceId: String(orderId) };
     }
   }

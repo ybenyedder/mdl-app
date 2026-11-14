@@ -66,6 +66,11 @@ npm run test:unit    # Vitest + PostgreSQL PGlite en mémoire
 DATABASE_URL="pglite://memory" npm run dev
 ```
 
+## Impression textile & boutique (optionnel)
+
+- **Mode local (par défaut)** : précommandes zéro avance de trésorerie + génération de bon de commande CSV/email prêt pour votre atelier local.
+- **Impression à la demande automatique (Gelato API v4)** : renseignez `GELATO_API_KEY` et `GELATO_SHIP_*` dans `.env` (compte gratuit **0 €/mois**, impression locale France/Europe, `GELATO_ORDER_TYPE=draft` ou `order`), puis indiquez le `productUid` Gelato dans la référence SKU de l'article et l'URL `https://` du visuel d'impression.
+
 ## Documentation
 
 - [Guide de déploiement débutant](./docs/DEPLOIEMENT_DEBUTANT.md) · [Administration](./docs/ADMIN.md) · [Utilisation](./docs/UTILISATION.md)

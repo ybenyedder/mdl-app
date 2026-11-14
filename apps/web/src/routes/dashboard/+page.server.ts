@@ -291,7 +291,7 @@ export const load: PageServerLoad = async ({ locals }) => {
 				: `Échéance proche (${d === 0 ? "aujourd'hui" : `J-${d}`}) : ${task.title}`,
 			description: `Projet « ${task.projectTitle} »`,
 			href: `/projets/${task.projectId}`,
-			ctaLabel: 'Voir le Kanban'
+			ctaLabel: 'Voir les tâches'
 		});
 	}
 

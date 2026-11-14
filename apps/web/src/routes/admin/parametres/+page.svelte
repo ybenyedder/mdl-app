@@ -413,7 +413,11 @@
 
 	function openDeleteRoleModal(role: RoleDefinition) {
 		deleteRoleTarget = role;
-		reassignRoleSlug = role.slug === 'adherent' ? 'invite' : 'adherent';
+		const fallback =
+			rolesList.find((r) => r.slug === 'adherent' && r.slug !== role.slug) ??
+			rolesList.find((r) => r.slug === 'invite' && r.slug !== role.slug) ??
+			rolesList.find((r) => r.slug !== role.slug);
+		reassignRoleSlug = fallback?.slug ?? '';
 		deleteRoleError = '';
 	}
 
@@ -817,6 +821,43 @@
 								</div>
 							</div>
 
+								<div class="space-y-1.5 sm:col-span-2">
+									<div class="flex flex-wrap items-center justify-between gap-2">
+										<label for="set-logo" class="block text-sm font-semibold text-ink">
+											Logo de la MDL (URL directe ou <code class="font-mono text-xs">/logo.svg</code>)
+										</label>
+										{#if logoUrl}
+											<button
+												type="button"
+												onclick={() => (logoUrl = '/logo.svg')}
+												class="text-xs font-semibold text-brand hover:underline"
+											>
+												Utiliser le logo MDL par défaut
+											</button>
+										{/if}
+									</div>
+									<div class="flex items-center gap-2.5">
+										<img
+											src={logoUrl.trim() || '/logo.svg'}
+											alt="Aperçu logo"
+											onerror={(e) => {
+												(e.currentTarget as HTMLImageElement).src = '/logo.svg';
+											}}
+											class="size-11 shrink-0 rounded-[10px] border border-border bg-surface object-cover"
+										/>
+										<input
+											id="set-logo"
+											type="text"
+											bind:value={logoUrl}
+											placeholder="/logo.svg ou https://.../logo-mdl.png"
+											class="min-h-11 flex-1 rounded-[10px] border border-border bg-surface px-3.5 py-2 text-base text-ink sm:text-sm focus:border-brand focus:outline-none"
+										/>
+									</div>
+									<p class="text-[11px] text-muted">
+										Laisse vide pour afficher le logo MDL officiel. Évite les liens Google/Brave Images : utilise l'adresse directe du fichier (<code class="font-mono">.png</code>, <code class="font-mono">.jpg</code>, <code class="font-mono">.svg</code>).
+									</p>
+								</div>
+
 							<div class="space-y-1.5">
 								<label for="set-rep" class="block text-sm font-semibold text-ink">
 									Représentant légal / Référent
@@ -1069,7 +1110,7 @@
 									>
 										Modifier permissions
 									</Button>
-									{#if !role.isSystem}
+									{#if role.slug !== 'president' && role.slug !== data.user?.role}
 										<Button
 											size="sm"
 											variant="danger"
@@ -1338,12 +1379,12 @@
 	{/snippet}
 </Modal>
 
-<!-- Modal confirmation suppression d'un rôle personnalisé -->
+<!-- Modal confirmation suppression d'un rôle -->
 <Modal
 	open={deleteRoleTarget !== null}
 	onclose={() => (deleteRoleTarget = null)}
 	title={deleteRoleTarget ? `Supprimer « ${deleteRoleTarget.label} »` : 'Supprimer le rôle'}
-	description="Action définitive pour ce rôle personnalisé."
+	description="Action définitive. Les membres et invitations liés seront réaffectés automatiquement."
 	size="sm"
 >
 	{#if deleteRoleTarget}

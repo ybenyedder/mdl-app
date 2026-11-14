@@ -6,6 +6,7 @@ import { requireAuth } from '$lib/server/auth';
 import { decryptText, encryptText, hmacLookup } from '$lib/server/crypto';
 import { db, REGISTRATION_MODES, schoolSettings } from '$lib/server/db';
 import { parseJsonBody } from '$lib/server/http';
+import { validateLogoUrlInput } from '$lib/server/logo-validation';
 import { maskSecretHint } from '$lib/server/stripe';
 import { settingsUpdateSchema } from '$shared/schemas';
 import type { RequestHandler } from './$types';
@@ -216,6 +217,15 @@ export const PUT: RequestHandler = async (event) => {
     );
   }
 
+  let nextLogoUrl: string | null = existing?.logoUrl ?? null;
+  if (payload.logoUrl !== undefined) {
+    const logoCheck = await validateLogoUrlInput(payload.logoUrl);
+    if (!logoCheck.ok) {
+      return json({ error: logoCheck.error }, { status: 400 });
+    }
+    nextLogoUrl = logoCheck.value;
+  }
+
   const nowIso = new Date().toISOString();
   const values = {
     schoolName: payload.schoolName,
@@ -226,7 +236,7 @@ export const PUT: RequestHandler = async (event) => {
     mdlName: payload.mdlName,
     primaryColor: payload.primaryColor,
     accentColor: payload.accentColor,
-    logoUrl: payload.logoUrl !== undefined ? payload.logoUrl || null : (existing?.logoUrl ?? null),
+    logoUrl: nextLogoUrl,
     membershipFeeCents: payload.membershipFeeCents,
     schoolYear: payload.schoolYear,
     legalRepresentative: payload.legalRepresentative,

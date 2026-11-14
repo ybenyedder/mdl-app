@@ -537,11 +537,11 @@
 			</div>
 		</section>
 
-		<!-- Formulaire ajout tâche + Kanban 3 colonnes -->
+		<!-- Formulaire ajout tâche + tableau 3 colonnes -->
 		<section aria-labelledby="kanban-heading" class="space-y-4">
 			<div class="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
 				<div>
-					<h2 id="kanban-heading" class="text-xl font-bold text-ink">Kanban des tâches</h2>
+					<h2 id="kanban-heading" class="text-xl font-bold text-ink">Tableau des tâches</h2>
 					<p class="text-xs text-muted">
 						Déplacement instantané entre colonnes (boutons accessibles ou glisser-déposer).
 					</p>

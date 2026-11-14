@@ -16,6 +16,7 @@ import {
 import { closeDb, db, ensureMigrated, roles, users } from './db';
 import { seedDatabase } from './db/seed';
 import { findRoleBySlug, loadRolesCatalog, loadRolesWithCounts } from './roles';
+import { deleteRoleWithReassignment, RoleDeletionError } from './roles';
 
 describe('dynamic roles & permissions (pglite://memory)', () => {
   beforeAll(async () => {
@@ -104,5 +105,22 @@ describe('dynamic roles & permissions (pglite://memory)', () => {
     const deleted = await findRoleBySlug(customSlug);
     expect(deleted).toBeNull();
     expect(hasPermission(customSlug, 'tickets:scan')).toBe(false);
+  });
+
+  it('allows deleting non-president system roles safely while protecting president and self role', async () => {
+    await expect(deleteRoleWithReassignment('president', 'president')).rejects.toBeInstanceOf(
+      RoleDeletionError
+    );
+    await expect(deleteRoleWithReassignment('secretaire', 'secretaire')).rejects.toBeInstanceOf(
+      RoleDeletionError
+    );
+
+    const res = await deleteRoleWithReassignment('invite', 'president', 'adherent');
+    expect(res.deletedSlug).toBe('invite');
+    expect(res.reassignTo).toBe('adherent');
+
+    // Reloading catalog must NOT resurrect intentionally deleted system roles.
+    const afterCatalog = await loadRolesCatalog();
+    expect(afterCatalog.some((r) => r.slug === 'invite')).toBe(false);
   });
 });
