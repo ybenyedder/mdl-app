@@ -74,6 +74,7 @@ async function getWasmModule(): Promise<LoadedWasm | null> {
 				await pkg.default();
 				return { pkg };
 			} catch (err) {
+				wasmInitPromise = null;
 				console.warn('[mdl-wasm] Initialisation WASM indisponible, bascule JS/Canvas:', err);
 				return null;
 			}

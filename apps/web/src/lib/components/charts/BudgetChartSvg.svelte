@@ -534,7 +534,7 @@
 				Aucune dépense catégorisée à afficher.
 			</div>
 		{:else}
-			<div class="flex flex-col items-center gap-5 sm:flex-row sm:items-center">
+			<div class="flex flex-col items-center gap-4">
 				<div class="relative shrink-0">
 					<svg
 						width={donutSize}

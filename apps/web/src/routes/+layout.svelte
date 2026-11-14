@@ -86,12 +86,24 @@
 		}
 
 		return new Promise((resolve) => {
-			(document as Document & { startViewTransition: (cb: () => Promise<void>) => void }).startViewTransition(
-				async () => {
+			const doc = document as Document & {
+				startViewTransition: (cb: () => Promise<void>) => {
+					ready?: Promise<unknown>;
+					finished?: Promise<unknown>;
+					updateCallbackDone?: Promise<unknown>;
+				};
+			};
+			try {
+				const transition = doc.startViewTransition(async () => {
 					resolve();
-					await navigation.complete;
-				}
-			);
+					await navigation.complete.catch(() => {});
+				});
+				transition?.ready?.catch(() => {});
+				transition?.finished?.catch(() => {});
+				transition?.updateCallbackDone?.catch(() => {});
+			} catch {
+				resolve();
+			}
 		});
 	});
 

@@ -63,6 +63,9 @@ RUN mkdir -p apps/web/drizzle \
     && "$ESBUILD" apps/web/src/lib/server/db/seed.ts \
       --bundle --platform=node --format=esm --packages=external \
       --outfile=apps/web/build/seed.js \
+    && "$ESBUILD" apps/web/src/lib/server/db/seed-staging.ts \
+      --bundle --platform=node --format=esm --packages=external \
+      --outfile=apps/web/build/seed-staging.js \
     && CI=true pnpm prune --prod
 
 # ------------------------------------------------------------------------------

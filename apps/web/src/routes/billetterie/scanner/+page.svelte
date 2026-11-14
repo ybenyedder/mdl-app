@@ -11,7 +11,7 @@
 		type OfflineScanRecord
 	} from '$lib/offline-scanner';
 	import { toast } from '$lib/stores/toast.svelte';
-	import { verifyTicketOfflineWasm } from '$lib/wasm-client';
+	import { isWasmAvailable, verifyTicketOfflineWasm } from '$lib/wasm-client';
 	import { formatDateTimeFr } from '$shared/format';
 	import { hasPermission } from '$shared/permissions';
 	import type { PageData } from './$types';
@@ -38,6 +38,7 @@
 	let isOnline = $state(true);
 	let publicKeyHex = $state('');
 	let keySource = $state<'network' | 'cache' | 'missing'>('missing');
+	let wasmReady = $state(false);
 
 	// Caméra + jsQR dynamique
 	let videoEl = $state<HTMLVideoElement | null>(null);
@@ -94,6 +95,12 @@
 	}
 
 	async function loadPublicKeyAndQueue() {
+		try {
+			wasmReady = await isWasmAvailable();
+		} catch {
+			wasmReady = false;
+		}
+
 		try {
 			const cachedKey = window.localStorage.getItem(PUBLIC_KEY_STORAGE);
 			if (cachedKey) {
@@ -502,6 +509,9 @@
 		<div class="flex flex-wrap items-center gap-2">
 			<Badge variant={isOnline ? 'success' : 'warning'} dot>
 				{isOnline ? 'En ligne' : 'Mode hors-ligne'}
+			</Badge>
+			<Badge variant={wasmReady ? 'success' : 'neutral'}>
+				{wasmReady ? 'WASM Ed25519 prêt' : 'WASM en chargement'}
 			</Badge>
 			<Badge variant={publicKeyHex ? 'brand' : 'danger'}>
 				{publicKeyHex

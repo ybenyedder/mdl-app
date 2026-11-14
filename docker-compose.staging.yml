@@ -1,0 +1,69 @@
+# ==============================================================================
+# MDL Connect — Environnement de STAGING isolé (données volumétriques de test)
+# Jamais partagé avec la production (`mdl-app` / `mdl-postgres` / `.env` prod).
+# Lancement : docker compose -p mdl-staging -f docker-compose.staging.yml up -d --build
+# Arrêt & purge : docker compose -p mdl-staging -f docker-compose.staging.yml down -v
+# ==============================================================================
+
+services:
+  postgres-staging:
+    image: postgres:17-alpine
+    container_name: mdl-staging-postgres
+    restart: unless-stopped
+    volumes:
+      - mdl_staging_pgdata:/var/lib/postgresql/data
+    environment:
+      POSTGRES_DB: mdl_staging
+      POSTGRES_USER: mdl_staging
+      POSTGRES_PASSWORD: ${STAGING_POSTGRES_PASSWORD:-mdl_staging_local_only_2026}
+      TZ: Europe/Paris
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U mdl_staging -d mdl_staging"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+      start_period: 5s
+    networks:
+      - mdl-staging-net
+
+  app-staging:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: mdl-staging-app
+    restart: unless-stopped
+    depends_on:
+      postgres-staging:
+        condition: service_healthy
+    ports:
+      - "${MDL_STAGING_LISTEN_IP:-127.0.0.1}:${MDL_STAGING_PORT:-3405}:3000"
+    volumes:
+      - mdl_staging_uploads:/app/data/uploads
+    environment:
+      NODE_ENV: production
+      HOST: 0.0.0.0
+      PORT: "3000"
+      MDL_STAGING: "1"
+      DATABASE_URL: postgresql://mdl_staging:${STAGING_POSTGRES_PASSWORD:-mdl_staging_local_only_2026}@postgres-staging:5432/mdl_staging
+      SESSION_SECRET: ${STAGING_SESSION_SECRET:-staging_ephemeral_session_secret_64_chars_00000000000000000000}
+      ENCRYPTION_KEY: ${STAGING_ENCRYPTION_KEY:-0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef}
+      TICKET_JWT_SECRET: ${STAGING_TICKET_JWT_SECRET:-staging_ticket_jwt_secret_000000000000000000000000000000}
+      ORIGIN: ${MDL_STAGING_ORIGIN:-http://localhost:3405}
+      UPLOADS_DIR: /app/data/uploads
+    command: ["sh", "-c", "node apps/web/build/seed-staging.js && exec node apps/web/build"]
+    healthcheck:
+      test: ["CMD", "curl", "-fsS", "http://127.0.0.1:3000/api/health"]
+      interval: 15s
+      timeout: 5s
+      retries: 5
+      start_period: 15s
+    networks:
+      - mdl-staging-net
+
+volumes:
+  mdl_staging_pgdata:
+  mdl_staging_uploads:
+
+networks:
+  mdl-staging-net:
+    driver: bridge
