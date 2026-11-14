@@ -1,0 +1,21 @@
+{
+  "name": "mdl-connect-monorepo",
+  "private": true,
+  "version": "1.0.0",
+  "description": "Application web PWA de gestion complète de Maison des Lycéens (MDL)",
+  "scripts": {
+    "dev": "pnpm --filter @mdl/web dev",
+    "build": "pnpm run build:wasm && pnpm --filter @mdl/web build",
+    "build:wasm": "bash scripts/build-wasm.sh",
+    "preview": "pnpm --filter @mdl/web preview",
+    "check": "pnpm --filter @mdl/web check",
+    "test:unit": "pnpm --filter @mdl/web test:unit",
+    "test:e2e": "pnpm --filter @mdl/web test:e2e",
+    "db:migrate": "pnpm --filter @mdl/web db:migrate",
+    "db:seed": "pnpm --filter @mdl/web db:seed"
+  },
+  "engines": {
+    "node": ">=22.0.0",
+    "pnpm": ">=9.0.0"
+  }
+}

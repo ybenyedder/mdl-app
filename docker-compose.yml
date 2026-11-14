@@ -1,0 +1,123 @@
+# ==============================================================================
+# MDL Connect — Stack Docker Compose auto-hébergée (PostgreSQL 17)
+# Services :
+#   - postgres    : Base de données PostgreSQL 17 (interne uniquement)
+#   - app         : Application SvelteKit 5 + Rust/WASM (port 127.0.0.1:3000)
+#   - backup      : Sauvegarde quotidienne pg_dump -Fc chiffrée AES-256 à 03h00
+#   - cloudflared : Tunnel HTTPS Cloudflare Zero Trust (activé via profile "tunnel")
+#   - uptime-kuma : Tableau de bord de surveillance (port 127.0.0.1:3001)
+# ==============================================================================
+
+services:
+  postgres:
+    image: postgres:17-alpine
+    container_name: mdl-postgres
+    restart: unless-stopped
+    volumes:
+      - ./data/postgres:/var/lib/postgresql/data
+    environment:
+      POSTGRES_DB: mdl
+      POSTGRES_USER: mdl
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      TZ: Europe/Paris
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U mdl -d mdl"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+    networks:
+      - mdl-net
+
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: mdl-app
+    restart: unless-stopped
+    depends_on:
+      postgres:
+        condition: service_healthy
+    ports:
+      - "${MDL_LISTEN_IP:-127.0.0.1}:${MDL_PORT:-3000}:3000"
+    volumes:
+      - ./data/uploads:/app/data/uploads
+    env_file:
+      - .env
+    environment:
+      NODE_ENV: production
+      HOST: 0.0.0.0
+      PORT: "3000"
+      DATABASE_URL: postgresql://mdl:${POSTGRES_PASSWORD}@postgres:5432/mdl
+      UPLOADS_DIR: /app/data/uploads
+    healthcheck:
+      test: ["CMD", "curl", "-fsS", "http://127.0.0.1:3000/api/health"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 20s
+    networks:
+      - mdl-net
+
+  backup:
+    image: postgres:17-alpine
+    container_name: mdl-backup
+    restart: unless-stopped
+    env_file:
+      - .env
+    environment:
+      TZ: Europe/Paris
+      DATABASE_URL: postgresql://mdl:${POSTGRES_PASSWORD}@postgres:5432/mdl
+      PGHOST: postgres
+      PGPORT: "5432"
+      PGUSER: mdl
+      PGDATABASE: mdl
+      PGPASSWORD: ${POSTGRES_PASSWORD}
+      MDL_DATA_DIR: /data
+      MDL_BACKUP_DIR: /backups
+      MDL_IN_CONTAINER: "1"
+    volumes:
+      - ./data/uploads:/data/uploads:ro
+      - ./backups:/backups
+      - ./scripts/backup.sh:/usr/local/bin/mdl-backup.sh:ro
+    entrypoint: ["/bin/sh", "-c"]
+    command:
+      - |
+        apk add --no-cache bash openssl rclone tar gzip tzdata >/dev/null && \
+        cp /usr/share/zoneinfo/Europe/Paris /etc/localtime && \
+        echo "0 3 * * * /bin/bash /usr/local/bin/mdl-backup.sh >> /var/log/mdl-backup.log 2>&1" > /etc/crontabs/root && \
+        echo "[mdl-backup] Cron quotidien planifié à 03h00 (Europe/Paris)." && \
+        exec crond -f -l 2
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - mdl-net
+
+  cloudflared:
+    image: cloudflare/cloudflared:latest
+    container_name: mdl-cloudflared
+    profiles:
+      - tunnel
+    restart: unless-stopped
+    command: tunnel --no-autoupdate run --token ${CLOUDFLARE_TUNNEL_TOKEN}
+    depends_on:
+      app:
+        condition: service_healthy
+    networks:
+      - mdl-net
+
+  uptime-kuma:
+    image: louislam/uptime-kuma:1
+    container_name: mdl-uptime-kuma
+    restart: unless-stopped
+    ports:
+      - "${MDL_LISTEN_IP:-127.0.0.1}:${UPTIME_KUMA_PORT:-3001}:3001"
+    volumes:
+      - ./uptime-kuma:/app/data
+    networks:
+      - mdl-net
+
+networks:
+  mdl-net:
+    driver: bridge
