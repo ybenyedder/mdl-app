@@ -73,7 +73,7 @@
 		try {
 			let registration = await navigator.serviceWorker.getRegistration();
 			if (!registration) {
-				registration = await navigator.serviceWorker.register('/service-worker.js');
+				registration = await navigator.serviceWorker.register('/sw.js', { updateViaCache: 'none' });
 			}
 			await navigator.serviceWorker.ready;
 

@@ -127,7 +127,7 @@
 			void updated.check().catch(() => {});
 			if ('serviceWorker' in navigator && !dev) {
 				void navigator.serviceWorker
-					.getRegistration('/service-worker.js')
+					.getRegistration()
 					.then((reg) => reg?.update().catch(() => {}))
 					.catch(() => {});
 			}
@@ -147,7 +147,7 @@
 			};
 			navigator.serviceWorker.addEventListener('controllerchange', handleControllerChange);
 			navigator.serviceWorker
-				.register('/service-worker.js', { updateViaCache: 'none' })
+				.register('/sw.js', { updateViaCache: 'none' })
 				.catch(() => {});
 		}
 
